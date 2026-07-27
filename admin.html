@@ -1,1 +1,115 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+<title>SharpBoi Upload</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<h1>Upload Beat</h1>
+
+
+<input id="title" placeholder="Beat Name">
+
+<input id="price" placeholder="Price">
+
+
+<input id="audio" type="file" accept="audio/*">
+
+
+<input id="image" type="file" accept="image/*">
+
+
+<button onclick="uploadBeat()">
+Upload
+</button>
+
+
+
+<script type="module">
+
+import {
+storage,
+db
+} from "./firebase.js";
+
+
+import {
+ref,
+uploadBytes,
+getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+
+import {
+collection,
+addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+
+window.uploadBeat = async function(){
+
+
+let title=document.getElementById("title").value;
+
+let price=document.getElementById("price").value;
+
+
+let audio=document.getElementById("audio").files[0];
+
+let image=document.getElementById("image").files[0];
+
+
+
+let audioRef=ref(storage,"beats/"+audio.name);
+
+let imageRef=ref(storage,"images/"+image.name);
+
+
+
+await uploadBytes(audioRef,audio);
+
+await uploadBytes(imageRef,image);
+
+
+
+let audioURL=await getDownloadURL(audioRef);
+
+let imageURL=await getDownloadURL(imageRef);
+
+
+
+await addDoc(collection(db,"beats"),{
+
+title:title,
+
+price:price,
+
+audio:audioURL,
+
+image:imageURL
+
+});
+
+
+
+alert("Beat Uploaded!");
+
+}
+
+
+
+</script>
+
+
+</body>
+
+</html>
