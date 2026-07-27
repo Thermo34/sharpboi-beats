@@ -1,1 +1,63 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+<title>SharpBoi Admin Login</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+<h1>SharpBoi Admin</h1>
+
+
+<input id="email" placeholder="Email">
+
+<input id="password" placeholder="Password" type="password">
+
+
+<button onclick="login()">
+Login
+</button>
+
+
+<script type="module">
+
+import {auth} from "./firebase.js";
+
+import {
+signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+window.login = function(){
+
+let email=document.getElementById("email").value;
+
+let password=document.getElementById("password").value;
+
+
+signInWithEmailAndPassword(auth,email,password)
+
+.then(()=>{
+
+window.location="admin.html";
+
+})
+
+
+.catch(e=>{
+
+alert(e.message);
+
+});
+
+}
+
+
+</script>
+
+
+</body>
+</html>
